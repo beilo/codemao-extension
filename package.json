@@ -1,0 +1,42 @@
+{
+  "name": "codemao-extension",
+  "displayName": "codemao-extension",
+  "description": "",
+  "version": "0.0.2",
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "icon": "icon.png",
+  "publisher": "beilo",
+  "repository":{},
+  "main": "./src/extension.js",
+  "scripts": {
+    "package": "vsce package"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "categories": [
+    "Extension Packs"
+  ],
+  "extensionPack": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "codemao-extension.checkSettings",
+        "title": "Check and Apply Settings"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.7",
+    "@types/vscode": "*",
+    "typescript": "^4.0.3",
+    "vsce": "^2.15.0",
+    "vscode": "*"
+  }
+}
