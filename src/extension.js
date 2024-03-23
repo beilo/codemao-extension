@@ -10,6 +10,14 @@ function activate(context) {
   // 在激活插件时记录一条日志信息
   outputChannel.appendLine("codemao-extension 启动!");
 
+  // 注册激活事件
+  let disposable = vscode.commands.registerCommand(
+    "codemao-extension.checkSettings",
+    function () {
+      applySettings();
+    }
+  );
+
   context.subscriptions.push(disposable);
 
   applySettings();
@@ -28,8 +36,8 @@ function applySettings() {
   const codeActionsOnSaveConfig = config.get("editor.codeActionsOnSave") || {};
 
   // 更新codeActionsOnSaveConfig对象
-  codeActionsOnSaveConfig["source.fixAll.eslint"] = "true";
-  codeActionsOnSaveConfig["source.fixAll.stylelint"] = "true";
+  codeActionsOnSaveConfig["source.fixAll.eslint"] = 'explicit';
+  codeActionsOnSaveConfig["source.fixAll.stylelint"] = 'explicit';
 
   // 更新editor.codeActionsOnSave设置
   config.update(
