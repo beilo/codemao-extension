@@ -2,16 +2,20 @@
   "name": "codemao-extension",
   "displayName": "codemao-extension",
   "description": "",
-  "version": "0.0.2",
-  "engines": {
-    "vscode": "^1.87.0"
-  },
+  "version": "0.0.4",
   "icon": "icon.png",
   "publisher": "beilo",
-  "repository":{},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beilo/codemao-extension.git"
+  },
   "main": "./src/extension.js",
   "scripts": {
-    "package": "vsce package"
+    "package": "vsce package",
+    "release": "standard-version && git push --follow-tags"
+  },
+  "engines": {
+    "vscode": ">=1.60.0"
   },
   "activationEvents": [
     "*"
@@ -35,6 +39,7 @@
   "devDependencies": {
     "@types/node": "^12.11.7",
     "@types/vscode": "*",
+    "standard-version": "^9.5.0",
     "typescript": "^4.0.3",
     "vsce": "^2.15.0",
     "vscode": "*"

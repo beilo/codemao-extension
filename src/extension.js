@@ -10,18 +10,9 @@ function activate(context) {
   // 在激活插件时记录一条日志信息
   outputChannel.appendLine("codemao-extension 启动!");
 
-  // 注册激活事件
-  let disposable = vscode.commands.registerCommand(
-    "codemao-extension.checkSettings",
-    function () {
-      checkAndApplySettings();
-    }
-  );
-
   context.subscriptions.push(disposable);
 
-  // 在扩展激活时立即检查设置
-  checkAndApplySettings();
+  applySettings();
 }
 
 function deactivate() {
@@ -29,31 +20,16 @@ function deactivate() {
   outputChannel.appendLine("codemao-extension 结束!");
 }
 
-function checkAndApplySettings() {
-  vscode.window
-    .showInformationMessage(
-      "您未设置stylelint和eslint的自动修复功能，是否开启？",
-      "确认",
-      "取消"
-    )
-    .then((selection) => {
-      if (selection === "确认") {
-        // 更新设置
-        applySettings(updateMessage);
-      }
-    });
-}
-
 // 在applySettings函数中，修正对象打印方式
-function applySettings(updateMessage) {
+function applySettings() {
   const config = vscode.workspace.getConfiguration();
 
   // 获取并打印codeActionsOnSaveConfig对象
   const codeActionsOnSaveConfig = config.get("editor.codeActionsOnSave") || {};
 
   // 更新codeActionsOnSaveConfig对象
-  codeActionsOnSaveConfig["source.fixAll.eslint"] = "true"; // 注意，这里应该是布尔值true，而不是字符串"true"
-  codeActionsOnSaveConfig["source.fixAll.stylelint"] = "true"; // 同上
+  codeActionsOnSaveConfig["source.fixAll.eslint"] = "true";
+  codeActionsOnSaveConfig["source.fixAll.stylelint"] = "true";
 
   // 更新editor.codeActionsOnSave设置
   config.update(
@@ -62,23 +38,10 @@ function applySettings(updateMessage) {
     vscode.ConfigurationTarget.Workspace
   );
 
-  // 获取并打印stylelint.validate设置
-  let stylelintConfig = config.get("stylelint.validate") || [];
-
-  // 更新stylelint.validate设置
-  if (!stylelintConfig.includes("css")) stylelintConfig.push("css");
-  if (!stylelintConfig.includes("less")) stylelintConfig.push("less");
-  if (!stylelintConfig.includes("scss")) stylelintConfig.push("scss");
-
-  // 更新stylelint.validate设置
-  config.update(
-    "stylelint.validate",
-    stylelintConfig,
-    vscode.ConfigurationTarget.Workspace
-  );
-
   // 显示更新提示
-  vscode.window.showInformationMessage(`已更新设置：${updateMessage}`);
+  vscode.window.showInformationMessage(
+    `已开启 ESLint 和 StyleLint 的自动修复功能`
+  );
 }
 
 module.exports = {
