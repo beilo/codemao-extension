@@ -9,5 +9,6 @@
         "less",
         "scss",
         "postcss"
-    ]
+    ],
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

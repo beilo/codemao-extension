@@ -46,6 +46,13 @@ function applySettings() {
     vscode.ConfigurationTarget.Workspace
   );
 
+  // 将 Prettier 应用为全局默认格式化工具
+  config.update(
+    "editor.defaultFormatter",
+    "esbenp.prettier-vscode",
+    vscode.ConfigurationTarget.Workspace
+  )
+
   // 显示更新提示
   vscode.window.showInformationMessage(
     `已开启 ESLint 和 StyleLint 的自动修复功能`
