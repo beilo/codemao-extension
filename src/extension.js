@@ -28,34 +28,43 @@ function deactivate() {
   outputChannel.appendLine("codemao-extension 结束!");
 }
 
-// 在applySettings函数中，修正对象打印方式
 function applySettings() {
   const config = vscode.workspace.getConfiguration();
 
-  // 获取并打印codeActionsOnSaveConfig对象
-  const codeActionsOnSaveConfig = config.get("editor.codeActionsOnSave") || {};
-
-  // 更新codeActionsOnSaveConfig对象
-  codeActionsOnSaveConfig["source.fixAll.eslint"] = 'explicit';
-  codeActionsOnSaveConfig["source.fixAll.stylelint"] = 'explicit';
-
-  // 更新editor.codeActionsOnSave设置
+  // 禁用 formatOnSave，由 codeActionsOnSave 中的 source.formatDocument 接管
   config.update(
-    "editor.codeActionsOnSave",
-    codeActionsOnSaveConfig,
+    "editor.formatOnSave",
+    false,
     vscode.ConfigurationTarget.Workspace
   );
 
-  // 将 Prettier 应用为全局默认格式化工具
+  // 使用数组形式，保证执行顺序：先格式化 → 再 ESLint → 再 Stylelint
+  config.update(
+    "editor.codeActionsOnSave",
+    [
+      "source.formatDocument",
+      "source.fixAll.eslint",
+      "source.fixAll.stylelint"
+    ],
+    vscode.ConfigurationTarget.Workspace
+  );
+
+  // ESLint 修复所有问题
+  config.update(
+    "eslint.codeActionsOnSave.mode",
+    "all",
+    vscode.ConfigurationTarget.Workspace
+  );
+
+  // Prettier 作为默认格式化工具
   config.update(
     "editor.defaultFormatter",
     "esbenp.prettier-vscode",
     vscode.ConfigurationTarget.Workspace
-  )
+  );
 
-  // 显示更新提示
   vscode.window.showInformationMessage(
-    `已开启 ESLint 和 StyleLint 的自动修复功能`
+    `已开启自动修复功能（顺序：Prettier → ESLint → Stylelint）`
   );
 }
 
